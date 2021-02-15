@@ -1,0 +1,140 @@
+.bold {
+    font-weight: 500;
+}
+
+p {
+    margin-bottom: 0 !important;
+}
+
+.home {
+    min-height: calc(100vh - 150px);
+}
+
+.carImg {
+    width: 100%;
+    height: auto;
+}
+
+.location {
+    font-size: 15px;
+}
+
+.location:before {
+    content: "( ";
+}
+
+.location:after {
+    content: " )";
+}
+
+.vGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 12px;
+    row-gap: 12px;
+}
+
+p.dateAdded.ml-auto {
+    font-size: 10px;
+    color: grey;
+    text-align: right;
+    margin-top: 15px;
+}
+
+.modelDetails {
+    margin-top: 25px;
+}
+
+p.dateAdded.ml-auto {
+    font-size: 10px;
+    color: grey;
+    text-align: right;
+    margin-top: 0;
+}
+
+.modelDetails {
+    margin-top: 25px;
+}
+
+.singleCar {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.singleCar:hover {
+    transform: scale(1.01);
+}
+
+div#my-sidebar {
+    width: 50%;
+}
+
+.carImage {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.car-details,
+.garage-detials {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+h1.selectedCar-model {
+    margin-left: 10px;
+}
+
+p.selectedCar-year {
+    margin-left: 10px;
+}
+
+p.selectedCar-year:before {
+    content: "(";
+}
+
+p.selectedCar-year:after {
+    content: ")";
+}
+
+p.selectedGarage-location {
+    margin-left: 10px;
+}
+
+p.selectedGarage-location::before {
+    content: "(";
+}
+
+p.selectedGarage-location:after {
+    content: ")";
+}
+
+.count-badge {
+    top: -15px;
+    position: relative;
+    left: 0px;
+}
+
+p.nolicensed {
+    position: absolute;
+    background: red;
+    top: 30px;
+    right: -58px;
+    width: 200px;
+    transform: rotate(45deg);
+    text-align: center;
+    color: #fff;
+}
+
+p.licensed {
+    position: absolute;
+    background: green;
+    top: 30px;
+    right: -58px;
+    width: 200px;
+    transform: rotate(45deg);
+    text-align: center;
+    color: #fff;
+}
