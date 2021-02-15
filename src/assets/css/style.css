@@ -137,3 +137,25 @@ p.licensed {
     min-height: 50px;
     text-transform: capitalize;
 }
+
+#my-trigger-button-id {
+    cursor: pointer;
+}
+
+.cart {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 40px;
+}
+
+.cart-car-name {
+    text-transform: capitalize;
+    max-height: 24px;
+    overflow: hidden;
+}
+
+button.btn.btn-outline-danger.deleteItem {
+    display: block;
+    border-radius: 0;
+    height: 100%;
+}

@@ -2,10 +2,11 @@
   <div class="home">
     <div class="text-right mt-4 container">
       <b-icon
-        v-b-tooltip.left="'Checkout'"
+        v-b-tooltip.left="'Click to Checkout'"
         icon="cart3"
         font-scale="2"
         id="my-trigger-button-id"
+        @click="checkoutSidebar()"
       ></b-icon>
       <b-badge variant="dark count-badge"> {{ cart.length }} </b-badge>
     </div>
@@ -55,7 +56,6 @@
       id="my-sidebar"
       title="Car Details"
       backdrop-variant="dark"
-      ref="mySidebar"
       backdrop
       shadow
     >
@@ -101,7 +101,7 @@
             <div class=" d-flex">
               <p class="bold">Warehouse:</p>
               <p class=" ml-auto">{{ selectdCar.Warehouse }}</p>
-            </div>            
+            </div>
             <button
               class="btn btn-block btn-sm btn-outline-primary mt-4"
               @click.prevent="addToCartFromSidebar"
@@ -111,6 +111,54 @@
           </div>
         </div>
       </div>
+    </b-sidebar>
+
+    <!--checkout sidebar here-->
+    <b-sidebar
+      id="checkout-sidebar"
+      title="Checkout"
+      backdrop-variant="dark"
+      backdrop
+      shadow
+      right
+    >
+      <div class="cart">
+        <div
+          class="carsInCart"
+          v-for="(car, cartIndex) in cart"
+          :key="cartIndex"
+        >
+          <div class="row border">
+            <div class="col-md-4 p-2">
+              <img class="carImg" :src="car.img" v-if="car.img" />
+              <img class="carImg" :src="dummyImg" v-else alt="car image" />
+            </div>
+            <div class="col-md-6 p-2">
+              <p class="cart-car-name">{{ car.Name }}</p>
+              <p class="cart-car-price bold">&euro; {{ car.Price }}</p>
+            </div>
+            <div class="col-md-2">
+              <button
+                class="btn btn-outline-danger deleteItem"
+                @click="deleteItem(cartIndex)"
+              >
+                x
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="d-flex bg-dark text-light align-items-center px-3 py-2">
+          <strong class="mr-auto">Total</strong>
+          <div class="row">
+            <div class="col-md-12">
+             &euro; {{TotalPrice}}
+            </div>
+          </div>
+        </div>
+      </template>
     </b-sidebar>
   </div>
 </template>
@@ -129,17 +177,21 @@ export default {
   }),
   methods: {
     OpenSidebar(index) {
-      console.log(index);
       this.selectdCar = this.sorted[index];
       this.$root.$emit("bv::toggle::collapse", "my-sidebar");
     },
     addToCart(index) {
       this.cart.push(this.sorted[index]);
-      // this.$root.$emit("bv::tooltip::show", "my-trigger-button-id");
     },
-    addToCartFromSidebar(){
-      this.cart.push(this.selectdCar)
-    }
+    addToCartFromSidebar() {
+      this.cart.push(this.selectdCar);
+    },
+    checkoutSidebar() {
+      this.$root.$emit("bv::toggle::collapse", "checkout-sidebar");
+    },
+    deleteItem(cartIndex) {
+      this.cart.splice(cartIndex, 1);
+    },
   },
   computed: {
     sorted() {
@@ -151,9 +203,9 @@ export default {
         return results * this.sortBy;
       });
     },
-  },
-  mounted() {
-    console.log(this.cars[0]);
+    TotalPrice() {
+     return  this.cart.reduce((acc, item) => acc + item.Price, 0);
+    }
   },
 };
 </script>
