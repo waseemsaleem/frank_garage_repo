@@ -159,3 +159,20 @@ button.btn.btn-outline-danger.deleteItem {
     border-radius: 0;
     height: 100%;
 }
+
+.cartIcon {
+    position: sticky;
+    top: 0;
+    z-index: 998;
+    background: #fff;
+    padding: 20px 0;
+}
+
+.quantity {
+    text-align: center;
+    margin-top: 18px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #dde2e6;
+    border-radius: 50%;
+}

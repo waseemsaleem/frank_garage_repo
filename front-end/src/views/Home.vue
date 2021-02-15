@@ -1,16 +1,18 @@
 <template>
   <div class="home">
-    <div class="text-right mt-4 container">
-      <b-icon
-        v-b-tooltip.left="'Click to Checkout'"
-        icon="cart3"
-        font-scale="2"
-        id="my-trigger-button-id"
-        @click="checkoutSidebar()"
-      ></b-icon>
-      <b-badge variant="dark count-badge"> {{ cart.length }} </b-badge>
+    <div class="text-right cartIcon">
+      <div class="container">
+        <b-icon
+          v-b-tooltip.left="'Click to Checkout'"
+          icon="cart3"
+          font-scale="2"
+          id="my-trigger-button-id"
+          @click="checkoutSidebar()"
+        ></b-icon>
+        <b-badge variant="dark count-badge">{{ cartItemsQuantity }}</b-badge>
+      </div>
     </div>
-    <!-- warehouse cars  -->
+    <!-- cars  -->
     <div class="container mt-5 mb-5">
       <div class="d-flex flex-row-reverse">
         <select v-model="sortBy">
@@ -52,122 +54,23 @@
     </div>
 
     <!-- sidebar here-->
-    <b-sidebar
-      id="my-sidebar"
-      title="Car Details"
-      backdrop-variant="dark"
-      backdrop
-      shadow
-    >
-      <div class="carInfo">
-        <img class="carImg" :src="selectdCar.img" v-if="selectdCar.img" />
-        <img class="carImg" :src="dummyImg" v-else alt="car image" />
-        <h1 class="mt-3 carName">{{ selectdCar.Name }}</h1>
-        <div class="row">
-          <div class="col-md-6">
-            <div class=" d-flex">
-              <p class="bold">Acceleration:</p>
-              <p class=" ml-auto">{{ selectdCar.Acceleration }}</p>
-            </div>
-            <div class=" d-flex">
-              <p class="bold">Horsepower:</p>
-              <p class=" ml-auto">{{ selectdCar.Horsepower }}</p>
-            </div>
-            <div class=" d-flex">
-              <p class="bold">Cylinders:</p>
-              <p class=" ml-auto">{{ selectdCar.Cylinders }}</p>
-            </div>
-            <div class=" d-flex">
-              <p class="bold">Displacement:</p>
-              <p class=" ml-auto">{{ selectdCar.Displacement }}</p>
-            </div>
-            <div class=" d-flex">
-              <p class="bold">Miles per Gallon:</p>
-              <p class=" ml-auto">{{ selectdCar.Miles_per_Gallon }}</p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="price d-flex">
-              <p class="bold">Price:</p>
-              <p class="price ml-auto">&euro;{{ selectdCar.Price }}</p>
-            </div>
-            <div class=" d-flex">
-              <p class="bold">Licensed:</p>
-              <p class="ml-auto text-success" v-if="selectdCar.Licensed">
-                License is Available
-              </p>
-              <p class="ml-auto text-danger" v-else>License is not Available</p>
-            </div>
-            <div class=" d-flex">
-              <p class="bold">Warehouse:</p>
-              <p class=" ml-auto">{{ selectdCar.Warehouse }}</p>
-            </div>
-            <button
-              class="btn btn-block btn-sm btn-outline-primary mt-4"
-              @click.prevent="addToCartFromSidebar"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </div>
-    </b-sidebar>
-
+    <CarDetailsSidebar
+      :selectdCar="selectdCar"
+      @addToCart="addToCartFromSidebar"
+    ></CarDetailsSidebar>
     <!--checkout sidebar here-->
-    <b-sidebar
-      id="checkout-sidebar"
-      title="Checkout"
-      backdrop-variant="dark"
-      backdrop
-      shadow
-      right
-    >
-      <div class="cart">
-        <div
-          class="carsInCart"
-          v-for="(car, cartIndex) in cart"
-          :key="cartIndex"
-        >
-          <div class="row border">
-            <div class="col-md-4 p-2">
-              <img class="carImg" :src="car.img" v-if="car.img" />
-              <img class="carImg" :src="dummyImg" v-else alt="car image" />
-            </div>
-            <div class="col-md-6 p-2">
-              <p class="cart-car-name">{{ car.Name }}</p>
-              <p class="cart-car-price bold">&euro; {{ car.Price }}</p>
-            </div>
-            <div class="col-md-2">
-              <button
-                class="btn btn-outline-danger deleteItem"
-                @click="deleteItem(cartIndex)"
-              >
-                x
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <template #footer>
-        <div class="d-flex bg-dark text-light align-items-center px-3 py-2">
-          <strong class="mr-auto">Total</strong>
-          <div class="row">
-            <div class="col-md-12">
-             &euro; {{TotalPrice}}
-            </div>
-          </div>
-        </div>
-      </template>
-    </b-sidebar>
+    <CheckoutSidebar :cart="cart" @deleteItem="deleteItem"> </CheckoutSidebar>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import json from "../json/data.json";
+import CarDetailsSidebar from "@/components/CarDetailsSidebar";
+import CheckoutSidebar from "@/components/CheckoutSidebar";
 export default {
   name: "Home",
+  components: { CarDetailsSidebar, CheckoutSidebar },
   data: () => ({
     dummyImg: require("@/assets/img/dummycar.png"),
     cars: json,
@@ -181,10 +84,20 @@ export default {
       this.$root.$emit("bv::toggle::collapse", "my-sidebar");
     },
     addToCart(index) {
-      this.cart.push(this.sorted[index]);
+      var item = this.sorted[index];
+      var findProduct = this.cart.find((o) => o.Name === item.Name);
+      if (findProduct) {
+        item.quantity++;
+        return console.log(item.quantity);
+      } else {
+        this.cart.push(item); 
+        item.quantity = 1;
+      }
     },
     addToCartFromSidebar() {
-      this.cart.push(this.selectdCar);
+      var item = this.selectdCar;
+      this.cart.push(item);
+      item.quantity = 1;
     },
     checkoutSidebar() {
       this.$root.$emit("bv::toggle::collapse", "checkout-sidebar");
@@ -203,9 +116,9 @@ export default {
         return results * this.sortBy;
       });
     },
-    TotalPrice() {
-     return  this.cart.reduce((acc, item) => acc + item.Price, 0);
-    }
+    cartItemsQuantity() {
+      return this.cart.reduce((acc, item) => acc + item.quantity, 0);
+    },
   },
 };
 </script>

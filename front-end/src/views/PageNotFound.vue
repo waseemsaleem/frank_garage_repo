@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-5 text-center">
+    <div class="container mt-5 text-center" style="height: calc(100vh - 200px)">
         <img src="@/assets/logo.png" alt="Vue.js">
         <h1>Page Not Found</h1>
         <div class="d-flex justify-content-center align-items-center mt-3">
