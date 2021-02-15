@@ -34,18 +34,11 @@ p {
     row-gap: 12px;
 }
 
-p.dateAdded.ml-auto {
-    font-size: 10px;
-    color: grey;
-    text-align: right;
-    margin-top: 15px;
-}
-
 .modelDetails {
     margin-top: 25px;
 }
 
-p.dateAdded.ml-auto {
+p.dateAdded {
     font-size: 10px;
     color: grey;
     text-align: right;
@@ -61,10 +54,6 @@ p.dateAdded.ml-auto {
     position: relative;
     overflow: hidden;
     transition: all 0.3s;
-}
-
-.singleCar:hover {
-    transform: scale(1.01);
 }
 
 div#my-sidebar {
@@ -137,4 +126,14 @@ p.licensed {
     transform: rotate(45deg);
     text-align: center;
     color: #fff;
+}
+
+.carInfo {
+    width: 80% !important;
+    margin-left: 10%;
+}
+
+.carName {
+    min-height: 50px;
+    text-transform: capitalize;
 }

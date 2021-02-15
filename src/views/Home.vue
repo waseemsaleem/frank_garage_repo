@@ -26,14 +26,92 @@
         >
           <img :src="car.img" v-if="car.img" />
           <img :src="dummyImg" v-else class="carImg" alt="car image" />
-          <p class="licensed" v-if="car.Licensed"> Licensed </p>
-          <p class="nolicensed" v-else> No License </p>
-          <h5>{{ car.Name }}</h5>
-          <p>{{ car.Date_added }}</p>
+          <p class="licensed" v-if="car.Licensed">Licensed</p>
+          <p class="nolicensed" v-else>No License</p>
+          <h5 class="carName">{{ car.Name }}</h5>
+          <p class="dateAdded">{{ car.Date_added }}</p>
+          <div class="price d-flex mt-3">
+            <button
+              class="btn btn-block btn-sm btn-outline-success"
+              @click="OpenSidebar(index)"
+            >
+              View More
+            </button>
+          </div>
+          <div class="price d-flex mt-1">
+            <button
+              class="btn btn-block btn-sm btn-outline-primary"
+              @click.prevent="addToCart(index)"
+            >
+              Add to Cart
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- sidebar here-->
+    <b-sidebar
+      id="my-sidebar"
+      title="Car Details"
+      backdrop-variant="dark"
+      ref="mySidebar"
+      backdrop
+      shadow
+    >
+      <div class="carInfo">
+        <img class="carImg" :src="selectdCar.img" v-if="selectdCar.img" />
+        <img class="carImg" :src="dummyImg" v-else alt="car image" />
+        <h1 class="mt-3 carName">{{ selectdCar.Name }}</h1>
+        <div class="row">
+          <div class="col-md-6">
+            <div class=" d-flex">
+              <p class="bold">Acceleration:</p>
+              <p class=" ml-auto">{{ selectdCar.Acceleration }}</p>
+            </div>
+            <div class=" d-flex">
+              <p class="bold">Horsepower:</p>
+              <p class=" ml-auto">{{ selectdCar.Horsepower }}</p>
+            </div>
+            <div class=" d-flex">
+              <p class="bold">Cylinders:</p>
+              <p class=" ml-auto">{{ selectdCar.Cylinders }}</p>
+            </div>
+            <div class=" d-flex">
+              <p class="bold">Displacement:</p>
+              <p class=" ml-auto">{{ selectdCar.Displacement }}</p>
+            </div>
+            <div class=" d-flex">
+              <p class="bold">Miles per Gallon:</p>
+              <p class=" ml-auto">{{ selectdCar.Miles_per_Gallon }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="price d-flex">
+              <p class="bold">Price:</p>
+              <p class="price ml-auto">&euro;{{ selectdCar.Price }}</p>
+            </div>
+            <div class=" d-flex">
+              <p class="bold">Licensed:</p>
+              <p class="ml-auto text-success" v-if="selectdCar.Licensed">
+                License is Available
+              </p>
+              <p class="ml-auto text-danger" v-else>License is not Available</p>
+            </div>
+            <div class=" d-flex">
+              <p class="bold">Warehouse:</p>
+              <p class=" ml-auto">{{ selectdCar.Warehouse }}</p>
+            </div>            
+            <button
+              class="btn btn-block btn-sm btn-outline-primary mt-4"
+              @click.prevent="addToCartFromSidebar"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </b-sidebar>
   </div>
 </template>
 
@@ -45,19 +123,37 @@ export default {
   data: () => ({
     dummyImg: require("@/assets/img/dummycar.png"),
     cars: json,
+    selectdCar: [],
     cart: [],
     sortBy: -1,
   }),
+  methods: {
+    OpenSidebar(index) {
+      console.log(index);
+      this.selectdCar = this.sorted[index];
+      this.$root.$emit("bv::toggle::collapse", "my-sidebar");
+    },
+    addToCart(index) {
+      this.cart.push(this.sorted[index]);
+      // this.$root.$emit("bv::tooltip::show", "my-trigger-button-id");
+    },
+    addToCartFromSidebar(){
+      this.cart.push(this.selectdCar)
+    }
+  },
   computed: {
     sorted() {
       return [...this.cars].sort((a, b) => {
-        var results
+        var results;
         a = new Date(a.Date_added);
         b = new Date(b.Date_added);
         results = a > b ? -1 : a < b ? 1 : 0;
         return results * this.sortBy;
       });
     },
+  },
+  mounted() {
+    console.log(this.cars[0]);
   },
 };
 </script>
