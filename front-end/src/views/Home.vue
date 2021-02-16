@@ -20,6 +20,7 @@
           <option value="-1">Acsending</option>
           <option value="1">Desending</option>
         </select>
+        <p class="mr-3">Created Date:</p>
       </div>
       <div class="vGrid mt-5">
         <div
@@ -76,28 +77,41 @@ export default {
     cars: json,
     selectdCar: [],
     cart: [],
+    selectedIndex: 0,
     sortBy: -1,
   }),
   methods: {
     OpenSidebar(index) {
       this.selectdCar = this.sorted[index];
+      this.selectedIndex = index;
       this.$root.$emit("bv::toggle::collapse", "my-sidebar");
     },
     addToCart(index) {
+      // debugger;
       var item = this.sorted[index];
       var findProduct = this.cart.find((o) => o.Name === item.Name);
       if (findProduct) {
         item.quantity++;
-        return console.log(item.quantity);
+        item.totalPrice = item.quantity * item.Price;
+        return;
       } else {
-        this.cart.push(item); 
+        this.cart.push(item);
         item.quantity = 1;
+        item.totalPrice = item.quantity * item.Price;
       }
     },
     addToCartFromSidebar() {
       var item = this.selectdCar;
-      this.cart.push(item);
-      item.quantity = 1;
+      var findProduct = this.cart.find((o) => o.Name === item.Name);
+      if (findProduct) {
+        item.quantity++;
+        item.totalPrice = item.quantity * item.Price;
+        return;
+      } else {
+        this.cart.push(item);
+        item.quantity = 1;
+        item.totalPrice = item.quantity * item.Price;
+      }
     },
     checkoutSidebar() {
       this.$root.$emit("bv::toggle::collapse", "checkout-sidebar");

@@ -59,7 +59,8 @@ export default {
   },
   computed: {
     TotalPrice() {
-      return this.cart.reduce((acc, item) => acc + item.Price, 0);
+      var totalAmount = this.cart.reduce((acc, item) => acc + item.totalPrice, 0);
+      return totalAmount 
     },
   },
 };
