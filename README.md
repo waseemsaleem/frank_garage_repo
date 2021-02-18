@@ -35,3 +35,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 3. Endpoint: localhost:8080/api/car
 
 Get and post request are exposed
+
+# Demo:
+
+https://frankgarage.netlify.app/
+
+See my LinkedIn:
+
+[LinkedIn](https://www.linkedin.com/in/waseemsaleem1/)  [XING](https://www.xing.com/profile/Muhammad_Waseem26/cv)  
+
